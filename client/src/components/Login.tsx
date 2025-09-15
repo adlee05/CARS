@@ -1,6 +1,6 @@
 import { AppWindowIcon, CodeIcon } from "lucide-react";
 import { ThemeProvider } from "@/components/theme-provider";
-import "./Login.css";
+import "./styles/Login.css";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -24,7 +24,7 @@ export default function Login() {
         <ModeToggle />
       </div>
       <h1>Curatr</h1>
-      <div className="min-h-190 flex justify-center items-center">
+      <div className="min-h-170 flex justify-center items-center">
         <div className="relative z-10 flex w-full max-w-sm flex-col gap-6">
           <Tabs defaultValue="Login">
             <TabsList font-mono>
