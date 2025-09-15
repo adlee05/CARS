@@ -1,5 +1,5 @@
 from utils import parse_date, setup_logging
-import re  # For text cleaning
+import re  # for text cleaning
 
 logger = setup_logging()
 
