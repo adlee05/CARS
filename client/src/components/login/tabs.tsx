@@ -1,4 +1,5 @@
 import { AppWindowIcon, CodeIcon } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,9 +13,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export default function Sample() {
+export function TabsComp() {
   return (
-    <div className="flex w-full max-w-sm flex-col gap-6 z-10">
+    <div className="flex w-full max-w-sm flex-col gap-6">
       <Tabs defaultValue="account">
         <TabsList>
           <TabsTrigger value="account">Account</TabsTrigger>
