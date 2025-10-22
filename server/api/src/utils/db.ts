@@ -1,0 +1,205 @@
+import { Client, QueryResult } from "pg";
+
+interface Article {
+  id: number;
+  title: string;
+  content: string;
+  url: string;
+  source: string;
+  region: string;
+  published_date: string;
+}
+
+class Database {
+  private client: Client;
+
+  constructor() {
+    this.client = new Client();
+  }
+  async connect(): Promise<void> {
+    await this.client.connect();
+  }
+  async disconnect(): Promise<void> {
+    await this.client.end();
+  }
+
+  async fetchArticle(articleId: number): Promise<Article | null> {
+    try {
+      const res: QueryResult = await this.client.query(
+        "SELECT id, title, content, url, source, region, published_date FROM articles WHERE id=$1;",
+        [articleId],
+      );
+
+      if (res.rows.length === 0) {
+        return null;
+      }
+
+      const row = res.rows[0];
+      return {
+        id: row.id,
+        title: row.title,
+        content: row.content,
+        url: row.url,
+        source: row.source,
+        region: row.region,
+        published_date: row.published_date,
+      };
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Error fetching article:", err.stack);
+      } else {
+        console.error("Unknown error occurred:", err);
+      }
+
+      throw err;
+    }
+  }
+  async resetSchema(schema_sql: string): Promise<void> {
+    try {
+      await this.client.query(schema_sql);
+      console.log("✅ Schema dropped and recreated successfully!");
+    } catch (e) {
+      console.error("❌ Error:", e);
+    }
+  }
+
+  async fetchTopKArticles(k: number): Promise<Article[]> {
+    try {
+      const res: QueryResult = await this.client.query(
+        "SELECT id, title, content, url, source, region, published_date FROM articles ORDER BY published_date DESC LIMIT $1;",
+        [k],
+      );
+
+      if (res.rows.length === 0) {
+        return [];
+      }
+
+      return res.rows.map((row) => ({
+        id: row.id,
+        title: row.title,
+        content: row.content,
+        url: row.url,
+        source: row.source,
+        region: row.region,
+        published_date: row.published_date,
+      }));
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Error fetching top articles:", err.stack);
+      } else {
+        console.error("Unknown error occurred:", err);
+      }
+      throw err;
+    }
+  }
+
+  async fetchSimilarArticles(
+    queryEmbedding: number[],
+    k: number = 10,
+  ): Promise<any[]> {
+    try {
+      const embeddingStr = `[${queryEmbedding.join(",")}]`;
+      const sql = `
+        SELECT a.id, a.title, a.content, a.url, a.source, a.region, a.published_date,
+            1 - (ae.embedding <=> $1::vector) AS cosine_similarity
+        FROM article_embeddings ae
+        JOIN articles a ON ae.article_id = a.id
+        ORDER BY 1 - (ae.embedding <=> $1::vector) DESC
+        LIMIT $2;
+      `;
+      const res: QueryResult = await this.client.query(sql, [embeddingStr, k]);
+
+      return res.rows.map((row) => ({
+        id: row.id,
+        title: row.title,
+        url: row.url,
+        source: row.source,
+        region: row.region,
+        published_date: row.published_date,
+        distance: row.cosine_similarity,
+      }));
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Error fetching article embedding:", err.stack);
+      } else {
+        console.error("Unknown error occurred:", err);
+      }
+      throw err;
+    }
+  }
+
+  async getArticleEmbedding(articleId: number): Promise<number[] | null> {
+    try {
+      const sql =
+        "SELECT embedding FROM article_embeddings WHERE article_id = $1;";
+      const res: QueryResult = await this.client.query(sql, [articleId]);
+
+      if (res.rows.length === 0) {
+        console.warn(`⚠️ No embedding found for article_id ${articleId}`);
+        return null;
+      }
+
+      const embeddingStr = res.rows[0].embedding;
+      const embedding = embeddingStr
+        .replace(/\[|\]/g, "")
+        .split(",")
+        .map((x: string) => parseFloat(x));
+
+      return embedding;
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Error fetching article embedding:", err.stack);
+      } else {
+        console.error("Unknown error occurred:", err);
+      }
+      throw err;
+    }
+  }
+  async getArticleEmbeddings(
+    articleIds: number[],
+  ): Promise<Map<number, number[]>> {
+    try {
+      if (articleIds.length === 0) {
+        return new Map();
+      }
+
+      const sql = `
+      SELECT article_id, embedding 
+      FROM article_embeddings 
+      WHERE article_id = ANY($1);
+    `;
+      const res: QueryResult = await this.client.query(sql, [articleIds]);
+
+      const embeddingsMap = new Map<number, number[]>();
+
+      for (const row of res.rows) {
+        const articleId = row.article_id;
+        const embeddingStr = row.embedding;
+        const embedding = embeddingStr
+          .replace(/\[|\]/g, "")
+          .split(",")
+          .map((x: string) => parseFloat(x));
+        embeddingsMap.set(parseInt(articleId), embedding);
+      }
+
+      const foundIds = new Set(embeddingsMap.keys());
+      const missingIds = articleIds.filter((id) => !foundIds.has(id));
+      if (missingIds.length > 0) {
+        console.warn(
+          `⚠️ No embeddings found for article_ids: ${missingIds.join(", ")}`,
+        );
+      }
+
+      return embeddingsMap;
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Error fetching article embeddings:", err.stack);
+      } else {
+        console.error("Unknown error occurred:", err);
+      }
+      throw err;
+    }
+  }
+}
+
+export default Database;
