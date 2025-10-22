@@ -1,5 +1,4 @@
 import { TabsComp } from "./tabs";
-import { ModeToggle } from "@/components/mode-toggle";
 import SplitText from "@/components/SplitText";
 import { FlickeringGrid } from "../ui/shadcn-io/flickering-grid/index";
 
@@ -7,14 +6,14 @@ export default function Login() {
   return (
     <>
       <FlickeringGrid
-        className="absolute inset-0"
+        className="absolute -z-10 inset-0"
         squareSize={7}
         gridGap={6}
         flickerChance={0.3}
         color="rgb(100, 100, 100)"
         maxOpacity={0.2}
       />
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-150 gap-[10px]">
+      <div className="relative flex flex-col items-center justify-center min-h-150 gap-[10px]">
         <SplitText
           text="Curatr"
           className="text-5xl font-semibold text-center"
@@ -30,7 +29,6 @@ export default function Login() {
           onLetterAnimationComplete={() => {}}
         />
         <p>Intelligent News for the Informed Mind.</p>
-        <ModeToggle />
         <TabsComp />
       </div>
     </>
