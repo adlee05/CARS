@@ -2,4 +2,8 @@ node_modules/
 *.env*
 *.onnx
 *.onnx.data
+*.onnx_data
 build-container.sh
+dist
+.DS_Store
+*.noinclude.*

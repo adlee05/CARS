@@ -1,15 +1,21 @@
 import express, { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import * as ort from "onnxruntime-node";
 import dotenv from "dotenv";
 import InferenceService from "./utils/inference";
 import Database from "./utils/db";
 import routes from "./routes/routes";
+import User from "./types/user";
+import { hashPassword } from "./utils/crypt";
+
 dotenv.config();
 
 declare module "express-serve-static-core" {
   interface Request {
     db: Database;
     service: InferenceService;
+    user: User;
   }
 }
 
@@ -17,6 +23,15 @@ const app = express();
 app.use(express.json());
 const db = new Database();
 const service = new InferenceService();
+
+let users: User[] = [
+  {
+    id: 1,
+    username: "john_doe",
+    password: "$2b$10$eN8Cln1/2IWmreO6Egw4qO1Kf5nbapOS4fkH9fuB3f7fSPTELEv/W", // bcrypt hash of 'password123'
+  },
+];
+
 function generateFloat32Array(length: number) {
   return new Float32Array(Array.from({ length }, () => Math.random()));
 }
@@ -27,27 +42,45 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
+// TODO: alpha version only, requires rewriting;
+const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
+  if (req.path === "/login") {
+    return next();
+  }
+  const token = req.header("Authorization")?.replace("Bearer ", "");
+  if (!token) return res.sendStatus(403);
+  jwt.verify(token, process.env.JWT_SECRET as string, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user as User;
+    next();
+  });
+};
+app.use(verifyJWT);
 app.use(routes);
-// app.get("/mock", async (req: Request, res: Response): Promise<void> => {
-//   try {
-//     const embed = await db.getArticleEmbeddings([381, 382, 383, 389]);
-//     const tmp = Array.from(embed.values());
-//     const projected = await service.inferNews({
-//       embeddings: tmp,
-//       embeddingDims: [tmp.length, 768],
-//     });
-//     console.log(projected);
-//     (res.status(200) as any).json({ a: tmp, b: tmp.length });
-//   } catch (error: unknown) {
-//     console.error("Error in /mock route:", error);
-//     const errorMessage =
-//       error instanceof Error ? error.message : "Unknown error";
-//     (res.status(500) as any).json({
-//       error: "Internal server error",
-//       details: errorMessage,
-//     });
-//   }
-// });
+
+// TODO: alpha version only, requires rewriting;
+app.post("/login", async (req: Request, res: Response) => {
+  console.log("in login", req.body);
+  const body = req.body;
+  if (!body || !body.username || !body.password) {
+    return res.status(400).send("Username and Password Required");
+  }
+  const user = users.find((u) => u.username === body.username);
+  if (!user) return res.status(401).send("User not found");
+  const isMatch = await bcrypt.compare(body.password, user?.password || "");
+  console.log(await hashPassword(body.password));
+  if (!isMatch) return res.status(401).send("Invalid password");
+  const token = jwt.sign(
+    { id: user.id, username: user.username },
+    process.env.JWT_SECRET as string,
+    { algorithm: "HS256", expiresIn: "1h" },
+  );
+  res.json({ token });
+});
+
+app.get("/dashboard", async (req: Request, res: Response) => {
+
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {

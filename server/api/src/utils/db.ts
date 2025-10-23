@@ -116,7 +116,7 @@ class Database {
         source: row.source,
         region: row.region,
         published_date: row.published_date,
-        distance: row.cosine_similarity,
+        similarity: row.cosine_similarity,
       }));
     } catch (err) {
       if (err instanceof Error) {
@@ -169,9 +169,7 @@ class Database {
       WHERE article_id = ANY($1);
     `;
       const res: QueryResult = await this.client.query(sql, [articleIds]);
-
       const embeddingsMap = new Map<number, number[]>();
-
       for (const row of res.rows) {
         const articleId = row.article_id;
         const embeddingStr = row.embedding;
@@ -181,7 +179,6 @@ class Database {
           .map((x: string) => parseFloat(x));
         embeddingsMap.set(parseInt(articleId), embedding);
       }
-
       const foundIds = new Set(embeddingsMap.keys());
       const missingIds = articleIds.filter((id) => !foundIds.has(id));
       if (missingIds.length > 0) {
@@ -193,9 +190,84 @@ class Database {
       return embeddingsMap;
     } catch (err) {
       if (err instanceof Error) {
-        console.error("Error fetching article embeddings:", err.stack);
+        console.error("error fetching article embeddings:", err.stack);
+      } else {
+        console.error("unknown error occurred:", err);
+      }
+      throw err;
+    }
+  }
+
+  async getUserPasswordHash(userId: number) {
+    try {
+      const sql = "SELECT hash FROM public.user WHERE id = $1;";
+      const res = await this.client.query(sql, [userId]);
+
+      if (res.rows.length === 0) {
+        return null; // No user found with the given ID
+      }
+      return res.rows[0].hash; // Return the password hash
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Error fetching password hash:", err.stack);
+      } else {
+        console.error("unknown error occurred:", err);
+      }
+      throw err;
+    }
+  }
+
+  async getClickedArticleEmbeddings(
+    userId: number,
+  ): Promise<Map<number, number[]>> {
+    try {
+      const sql = `
+            SELECT ui.article_id, ae.embedding
+            FROM public.user_interactions ui
+            JOIN article_embeddings ae ON ui.article_id = ae.article_id
+            WHERE ui.user_id = $1 AND ui.type = 'click';
+        `;
+      const res = await this.client.query(sql, [userId]);
+
+      if (res.rows.length === 0) {
+        return new Map(); // No clicked articles or no embeddings found
+      }
+
+      const embeddingsMap = new Map<number, number[]>();
+      for (const row of res.rows) {
+        const articleId = row.article_id;
+        const embeddingStr = row.embedding;
+        const embedding = embeddingStr
+          .replace(/\[|\]/g, "")
+          .split(",")
+          .map((x: string) => parseFloat(x));
+        embeddingsMap.set(articleId, embedding);
+      }
+
+      return embeddingsMap;
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Error fetching clicked article embeddings:", err.stack);
       } else {
         console.error("Unknown error occurred:", err);
+      }
+      throw err;
+    }
+  }
+  async getClickedArticleIds(userId: number) {
+    try {
+      const sql = `
+            SELECT article_id
+            FROM public.user_interactions
+            WHERE user_id = $1 AND type = 'click';
+        `;
+      const res = await this.client.query(sql, [userId]);
+      return res.rows.map((row) => parseInt(row.article_id)); // Return an array of article IDs
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Error fetching clicked article IDs:", err.stack);
+      } else {
+        console.error("unknown error occurred:", err);
       }
       throw err;
     }
