@@ -1,10 +1,17 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import * as ort from "onnxruntime-node";
 import dotenv from "dotenv";
 import InferenceService from "./utils/inference";
 import Database from "./utils/db";
 import routes from "./routes/routes";
 dotenv.config();
+
+declare module "express-serve-static-core" {
+  interface Request {
+    db: Database;
+    service: InferenceService;
+  }
+}
 
 const app = express();
 app.use(express.json());
@@ -14,7 +21,7 @@ function generateFloat32Array(length: number) {
   return new Float32Array(Array.from({ length }, () => Math.random()));
 }
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   req.db = db;
   req.service = service;
   next();

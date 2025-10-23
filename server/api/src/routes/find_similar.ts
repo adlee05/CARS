@@ -1,14 +1,19 @@
-import express from "express";
-const FindSimilar = async (req, res): Promise<void> => {
+import { Request, Response } from "express";
+const FindSimilar = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+  if (!id) {
+    res.status(400).send("Bad Request: ID should be a valid number");
+  }
   try {
-    const embed = await req.db.getArticleEmbeddings([381, 382, 383, 389]);
-    const tmp = Array.from(embed.values());
-    const projected = await req.service.inferUser({
-      embeddings: tmp,
-      embeddingDims: [tmp.length, 768],
-    });
-    console.log(projected);
-    (res.status(200) as any).json({ a: tmp, b: tmp.length });
+    const embed = await req.db.getArticleEmbedding(parseInt(id));
+    if (!embed) {
+      res
+        .status(404)
+        .json({ msg: `article with id ${id} could not be found.` });
+    } else {
+      const result = await req.db.fetchSimilarArticles(embed);
+      (res.status(200) as any).json(result);
+    }
   } catch (error: unknown) {
     console.error("Error in /mock route:", error);
     const errorMessage =
@@ -18,6 +23,6 @@ const FindSimilar = async (req, res): Promise<void> => {
       details: errorMessage,
     });
   }
-})
+};
 
 export default FindSimilar;
