@@ -20,10 +20,6 @@ def scrape_feed(url, region):
             if processed:
                 processed_articles.append(processed)
 
-        # Log or save to file instead of DB
-        with open('articles.json', 'a') as f:
-            json.dump(processed_articles, f, indent=2)
-            f.write('\n')  # For readability
         logger.info(f"Scraped {len(processed_articles)} articles from {url}")
         return processed_articles
     except Exception as e:
@@ -33,7 +29,7 @@ def scrape_feed(url, region):
 def scrape_all_regions():
     """Scrapes all regions from config.yaml."""
     try:
-        with open('config.yaml', 'r') as f:
+        with open('../config.yaml', 'r') as f:
             config = yaml.safe_load(f)
         region_feeds = config.get('region_feeds', {})
         all_articles = []
@@ -44,7 +40,11 @@ def scrape_all_regions():
                 all_articles.extend(articles)
 
         logger.info(f"Total articles scraped: {len(all_articles)}")
-        # Return or save all_articles
+        
+        # Save all articles to JSON file
+        with open('articles.json', 'w') as f:
+            json.dump(all_articles, f, indent=2)
+        logger.info(f"Saved {len(all_articles)} articles to articles.json")
     except Exception as e:
         logger.error(f"Error in scrape_all_regions: {e}")
 

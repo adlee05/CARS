@@ -17,7 +17,7 @@ export const NavigationSheet = () => {
         <Logo />
 
         <div className="mt-12 text-base space-y-4">
-          <Link to="#" className="inline-block">
+          <Link to="/home" className="inline-block">
             Home
           </Link>
 
