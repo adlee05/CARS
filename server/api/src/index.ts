@@ -73,14 +73,11 @@ app.post("/login", async (req: Request, res: Response) => {
   const token = jwt.sign(
     { id: user.id, username: user.username },
     process.env.JWT_SECRET as string,
-    { algorithm: "HS256", expiresIn: "1h" },
+    { algorithm: "HS256", expiresIn: "48h" },
   );
   res.json({ token });
 });
 
-app.get("/dashboard", async (req: Request, res: Response) => {
-
-});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
