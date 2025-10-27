@@ -15,22 +15,22 @@ import {
 
 export const foods = [
   {
-    title: "Dessert",
+    title: "Technology",
     icon: CakeSlice,
     description: "Sweet treats to satisfy your cravings.",
   },
   {
-    title: "Pizza",
+    title: "World News",
     icon: Pizza,
     description: "Delicious, cheesy slices of goodness.",
   },
   {
-    title: "Sandwich",
+    title: "Sports",
     icon: Sandwich,
     description: "Classic and hearty fast food options.",
   },
   {
-    title: "Coffee",
+    title: "Natural",
     icon: Coffee,
     description: "Your go-to boost of caffeine.",
   },

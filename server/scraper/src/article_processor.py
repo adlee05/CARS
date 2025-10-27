@@ -22,8 +22,10 @@ def process_article(entry, feed, region):
             'url': entry.link,
             'published_date': parse_date(entry.published) if 'published' in entry else parse_date(feed.feed.published),
             'source': feed.feed.title,
-            'region': region  # Tag with region for later filtering
+            'region': region,  # Tag with region for later filtering
+            'image': article.top_image
         }
+
         logger.info(f"Processed article: {processed_data['title']} from {region}")
         return processed_data
     except Exception as e:
