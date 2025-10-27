@@ -11,12 +11,22 @@ import {
 import { ChevronRight } from "lucide-react";
 import type { Article } from "@/types/article";
 import { format } from "date-fns";
+import { redirectToArticle } from "@/services/api";
 
 interface Blog02PageProps {
   articles: Article[];
 }
 
 const Blog02Page = ({ articles }: Blog02PageProps) => {
+  const handleReadMore = async (articleId: number) => {
+    try {
+      const url = await redirectToArticle(articleId);
+      window.open(url, '_blank');
+    } catch (error) {
+      console.error('Error redirecting to article:', error);
+    }
+  };
+
   return (
     <div className="max-w-(--breakpoint-xl) mx-auto py-16 px-6 xl:px-0">
       <div className="flex items-end justify-between">
@@ -60,7 +70,7 @@ const Blog02Page = ({ articles }: Blog02PageProps) => {
                 {article.content}
               </p>
 
-              <Button size="sm" className="mt-6 shadow-none" onClick={() => window.open(article.url, '_blank')}>
+              <Button size="sm" className="mt-6 shadow-none" onClick={() => handleReadMore(article.id)}>
                 Read more <ChevronRight />
               </Button>
             </CardContent>

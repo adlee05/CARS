@@ -42,7 +42,7 @@ class Database {
         url: row.url,
         source: row.source,
         region: row.region,
-        image: row.image,
+        image: row.top_image,
         published_date: row.published_date,
       };
     } catch (err) {
@@ -307,6 +307,27 @@ class Database {
         console.error("Error fetching clicked article IDs:", err.stack);
       } else {
         console.error("unknown error occurred:", err);
+      }
+      throw err;
+    }
+  }
+
+  async recordInteraction(
+    userId: number,
+    articleId: number,
+    interactionType: string,
+  ): Promise<void> {
+    try {
+      const sql = `
+        INSERT INTO public.user_interactions (user_id, article_id, type, timestamp)
+        VALUES ($1, $2, $3, NOW())
+      `;
+      await this.client.query(sql, [userId, articleId, interactionType]);
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Error recording interaction:", err.stack);
+      } else {
+        console.error("Unknown error occurred:", err);
       }
       throw err;
     }
