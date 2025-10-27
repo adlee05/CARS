@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import * as ort from "onnxruntime-node";
 import dotenv from "dotenv";
+import cors from "cors";
 import InferenceService from "./utils/inference";
 import Database from "./utils/db";
 import routes from "./routes/routes";
@@ -10,6 +11,16 @@ import User from "./types/user";
 import { hashPassword } from "./utils/crypt";
 
 dotenv.config();
+const app = express();
+app.use(express.json());
+
+app.use(
+  cors({
+    origin: "*", // Allow all origins
+    methods: "GET, POST, OPTIONS", // Allow necessary methods
+    allowedHeaders: "Content-Type, Authorization", // Allow Content-Type and Authorization headers
+  }),
+);
 
 declare module "express-serve-static-core" {
   interface Request {
@@ -19,11 +30,8 @@ declare module "express-serve-static-core" {
   }
 }
 
-const app = express();
-app.use(express.json());
 const db = new Database();
 const service = new InferenceService();
-
 let users: User[] = [
   {
     id: 1,
@@ -77,7 +85,6 @@ app.post("/login", async (req: Request, res: Response) => {
   );
   res.json({ token });
 });
-
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
