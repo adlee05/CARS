@@ -9,6 +9,7 @@ import Database from "./utils/db";
 import routes from "./routes/routes";
 import User from "./types/user";
 import { hashPassword } from "./utils/crypt";
+import { supabase } from "./utils/supabase";
 
 dotenv.config();
 const app = express();
@@ -52,7 +53,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 // TODO: alpha version only, requires rewriting;
 const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
-  if (req.path === "/login") {
+  if (req.path === "/login" || req.path === "/register") {
     return next();
   }
   const token = req.header("Authorization")?.replace("Bearer ", "");
@@ -70,20 +71,89 @@ app.use(routes);
 app.post("/login", async (req: Request, res: Response) => {
   console.log("in login", req.body);
   const body = req.body;
-  if (!body || !body.username || !body.password) {
-    return res.status(400).send("Username and Password Required");
+  if (!body || !body.email || !body.password) {
+    return res.status(400).send("Email and Password Required");
   }
-  const user = users.find((u) => u.username === body.username);
-  if (!user) return res.status(401).send("User not found");
-  const isMatch = await bcrypt.compare(body.password, user?.password || "");
-  console.log(await hashPassword(body.password));
-  if (!isMatch) return res.status(401).send("Invalid password");
-  const token = jwt.sign(
-    { id: user.id, username: user.username },
-    process.env.JWT_SECRET as string,
-    { algorithm: "HS256", expiresIn: "48h" },
-  );
-  res.json({ token });
+
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: body.email,
+      password: body.password,
+    });
+
+    if (error) {
+      return res.status(401).json({ error: error.message });
+    }
+
+    if (!data.session) {
+      return res.status(401).json({ error: "Failed to create session" });
+    }
+
+    // Generate JWT for backward compatibility
+    const token = jwt.sign(
+      { id: data.user.id, email: data.user.email, username: data.user.email?.split('@')[0] },
+      process.env.JWT_SECRET as string,
+      { algorithm: "HS256", expiresIn: "48h" },
+    );
+
+    res.json({ token, user: data.user });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.post("/register", async (req: Request, res: Response) => {
+  console.log("in register", req.body);
+  const body = req.body;
+  if (!body || !body.email || !body.password) {
+    return res.status(400).send("Email and Password Required");
+  }
+
+  if (body.password.length < 6) {
+    return res.status(400).send("Password must be at least 6 characters");
+  }
+
+  try {
+    const redirectUrl = `${process.env.CLIENT_URL || 'http://localhost:5173'}/auth/email-confirmation`;
+    
+    const { data, error } = await supabase.auth.signUp({
+      email: body.email,
+      password: body.password,
+      options: {
+        emailRedirectTo: redirectUrl,
+      },
+    });
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    if (!data.user) {
+      return res.status(400).json({ error: "Failed to create user" });
+    }
+
+    // Check if email confirmation is required
+    if (data.session) {
+      // User is automatically logged in (no email confirmation required)
+      const token = jwt.sign(
+        { id: data.user.id, email: data.user.email, username: data.user.email?.split('@')[0] },
+        process.env.JWT_SECRET as string,
+        { algorithm: "HS256", expiresIn: "48h" },
+      );
+      return res.json({ token, user: data.user });
+    } else {
+      // Email confirmation required
+      return res.json({ 
+        user: data.user,
+        requiresEmailConfirmation: true,
+        message: "Please check your email to confirm your account." 
+      });
+    }
+  } catch (err) {
+    console.error("Register error:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 const PORT = process.env.PORT || 3000;

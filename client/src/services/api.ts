@@ -55,7 +55,7 @@ export const redirectToArticle = async (articleId: number): Promise<string> => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ article_id: articleId }),
-    });
+    })
 
     if (!response.ok) {
       const errorText = await response.text();
