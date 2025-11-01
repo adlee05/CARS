@@ -15,19 +15,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function TabsComp() {
   return (
-    <div className="flex w-full max-w-sm flex-col gap-6">
+    <div className="flex w-full text-center max-w-sm flex-col gap-6">
       <Tabs defaultValue="account">
         <TabsList>
-          <TabsTrigger value="account">Account</TabsTrigger>
-          <TabsTrigger value="password">Password</TabsTrigger>
+          <TabsTrigger value="account">Login</TabsTrigger>
+          <TabsTrigger value="password">Sign Up</TabsTrigger>
         </TabsList>
         <TabsContent value="account">
           <Card>
             <CardHeader>
-              <CardTitle>Account</CardTitle>
+              <CardTitle>Login</CardTitle>
               <CardDescription>
-                Make changes to your account here. Click save when you&apos;re
-                done.
+               Hop back in to read news. 
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-6">
@@ -48,24 +47,23 @@ export function TabsComp() {
         <TabsContent value="password">
           <Card>
             <CardHeader>
-              <CardTitle>Password</CardTitle>
+              <CardTitle>Sign Up</CardTitle>
               <CardDescription>
-                Change your password here. After saving, you&apos;ll be logged
-                out.
+               Create an account to access curatr. 
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-6">
               <div className="grid gap-3">
-                <Label htmlFor="tabs-demo-current">Current password</Label>
+                <Label htmlFor="tabs-demo-current">Email</Label>
                 <Input id="tabs-demo-current" type="password" />
               </div>
               <div className="grid gap-3">
-                <Label htmlFor="tabs-demo-new">New password</Label>
+                <Label htmlFor="tabs-demo-new">Password</Label>
                 <Input id="tabs-demo-new" type="password" />
               </div>
             </CardContent>
             <CardFooter>
-              <Button>Save password</Button>
+              <Button>Create Account</Button>
             </CardFooter>
           </Card>
         </TabsContent>

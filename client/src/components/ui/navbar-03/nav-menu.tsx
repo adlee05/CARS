@@ -14,7 +14,7 @@ import type { LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import React from "react";
 import type { ComponentProps } from "react";
-import { foods, travelMenuItems } from "./config";
+import { categories } from "./config";
 
 export const NavMenu = (props: ComponentProps<typeof NavigationMenu>) => (
   <NavigationMenu {...props}>
@@ -25,10 +25,10 @@ export const NavMenu = (props: ComponentProps<typeof NavigationMenu>) => (
         </Button>
       </NavigationMenuItem>
       <NavigationMenuItem>
-        <NavigationMenuTrigger>login</NavigationMenuTrigger>
+        <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
         <NavigationMenuContent>
           <ul className="grid w-[400px] gap-3 p-1 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-            {foods.map((food) => (
+            {categories.map((food) => (
               <ListItem
                 key={food.title}
                 title={food.title}
@@ -36,23 +36,6 @@ export const NavMenu = (props: ComponentProps<typeof NavigationMenu>) => (
                 to="#"
               >
                 {food.description}
-              </ListItem>
-            ))}
-          </ul>
-        </NavigationMenuContent>
-      </NavigationMenuItem>
-      <NavigationMenuItem>
-        <NavigationMenuTrigger>Travel</NavigationMenuTrigger>
-        <NavigationMenuContent>
-          <ul className="grid w-[400px] gap-3 p-1 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-            {travelMenuItems.map((menuItem) => (
-              <ListItem
-                key={menuItem.title}
-                title={menuItem.title}
-                icon={menuItem.icon}
-                to="#"
-              >
-                {menuItem.description}
               </ListItem>
             ))}
           </ul>

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { Link } from "react-router-dom";
-import { foods, travelMenuItems } from "./config";
+import { categories } from "./config";
 import { Logo } from "./logo";
 
 export const NavigationSheet = () => {
@@ -24,25 +24,11 @@ export const NavigationSheet = () => {
           <div>
             <div className="font-bold">Food</div>
             <ul className="mt-2 space-y-3 ml-1 pl-4 border-l">
-              {foods.map((foodItem) => (
+              {categories.map((foodItem) => (
                 <li key={foodItem.title}>
                   <Link to="#" className="flex items-center gap-2">
                     <foodItem.icon className="h-5 w-5 mr-2 text-muted-foreground" />
                     {foodItem.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <div className="font-bold">Travel</div>
-            <ul className="mt-2 space-y-3 ml-1 pl-4 border-l">
-              {travelMenuItems.map((item) => (
-                <li key={item.title}>
-                  <Link to="#" className="flex items-center gap-2">
-                    <item.icon className="h-5 w-5 mr-2 text-muted-foreground" />
-                    {item.title}
                   </Link>
                 </li>
               ))}

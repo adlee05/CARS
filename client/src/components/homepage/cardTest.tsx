@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Blog02Page = () => {
   return (
@@ -31,7 +32,9 @@ const Blog02Page = () => {
         {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
           <Card key={i} className="shadow-none overflow-hidden rounded-md py-0">
             <CardHeader className="p-0">
-              <div className="aspect-video bg-muted w-full border-b" />
+              <div className="aspect-video w-full border-b">
+                <img className="object-cover h-full w-full" src="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/2c69/live/ad7c2640-b239-11f0-ba75-093eca1ac29b.jpg" />
+              </div>
             </CardHeader>
             <CardContent className="pb-6">
               <div className="flex items-center gap-3">
@@ -43,9 +46,12 @@ const Blog02Page = () => {
                 </span>
               </div>
 
-              <h3 className="mt-4 text-[1.35rem] font-semibold tracking-tight">
-                A beginner&apos;s guide to blackchain for engineers
-              </h3>
+              <Link to="/article">
+                <h3 className="mt-4 text-[1.35rem] font-semibold tracking-tight">
+                  A beginner&apos;s guide to blockchain for engineers
+                </h3>
+              </Link>
+
               <p className="mt-2 text-muted-foreground">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Suspendisse varius enim in eros.
