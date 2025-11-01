@@ -1,5 +1,6 @@
 import * as ort from "onnxruntime-node";
 import path from "path";
+import { AutoModel, AutoTokenizer } from "@huggingface/transformers";
 
 interface EncoderInput {
   embeddings: readonly number[][];
@@ -12,13 +13,10 @@ interface TensorDict {
 
 class InferenceModel {
   private session!: ort.InferenceSession;
-
   constructor(private modelPath: string) {}
-
   async loadModel() {
     this.session = await ort.InferenceSession.create(this.modelPath);
   }
-
   async infer(feeds: TensorDict): Promise<ort.Tensor> {
     const results = await this.session.run(feeds);
     const outputName = this.session.outputNames[0];
@@ -29,22 +27,18 @@ class InferenceModel {
 class InferenceService {
   private newsEncoder: InferenceModel;
   private userEncoder: InferenceModel;
-
   constructor() {
     const newsEncoderPath = path.join("src/models/news_encoder.onnx");
     const userEncoderPath = path.join("src/models/user_encoder.onnx");
-
     this.newsEncoder = new InferenceModel(newsEncoderPath);
     this.userEncoder = new InferenceModel(userEncoderPath);
   }
-
   async initialize() {
     await Promise.all([
       this.newsEncoder.loadModel(),
       this.userEncoder.loadModel(),
     ]);
   }
-
   async inferNews(input: EncoderInput): Promise<ort.Tensor> {
     const flattenedEmbeddings = new Float32Array(input.embeddings.flat());
     const embeddingTensor = new ort.Tensor("float32", flattenedEmbeddings, [

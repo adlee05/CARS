@@ -15,7 +15,7 @@ const FindSimilar = async (req: Request, res: Response): Promise<void> => {
       (res.status(200) as any).json(result);
     }
   } catch (error: unknown) {
-    console.error("Error in /mock route:", error);
+    console.error("Error in find similar route:", error);
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
     (res.status(500) as any).json({
