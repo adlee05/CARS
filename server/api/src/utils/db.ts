@@ -312,6 +312,27 @@ class Database {
     }
   }
 
+  async registerUser(
+    id: string,
+    email: string,
+    role: string,
+    username: string,
+  ): Promise<void> {
+    try {
+      const sql = `
+      INSERT INTO public.user (id, email, role, created_at, username)
+      VALUES ($1, $2, $3, NOW(), $4)
+    `;
+      await this.client.query(sql, [id, email, role, username]);
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error("Error registering user:", err.stack);
+      } else {
+        console.error("Unknown error occurred:", err);
+      }
+      throw err;
+    }
+  }
   async recordInteraction(
     userId: number,
     articleId: number,
