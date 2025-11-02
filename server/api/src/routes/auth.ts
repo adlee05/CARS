@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { supabase } from "../utils/supabase";
 
 const Login = async (req: Request, res: Response) => {
