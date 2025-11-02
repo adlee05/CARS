@@ -18,10 +18,7 @@ function App() {
           </PublicRoute>
         }
       />
-      <Route
-        path="/auth/email-confirmation"
-        element={<EmailConfirmation />}
-      />
+      <Route path="/auth/email-confirmation" element={<EmailConfirmation />} />
       {/* GeneralLayout is now a route element */}
       <Route path="/" element={<GeneralLayout />}>
         <Route
@@ -41,6 +38,7 @@ function App() {
           }
         />
       </Route>
+      {/* <Route path="/article/:id" element={<ArticleDetailPage />/> */}{" "}
     </Routes>
   );
 }

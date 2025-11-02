@@ -64,10 +64,14 @@ class Database {
     }
   }
 
-  async fetchTopKArticles(k: number): Promise<Article[]> {
+  async fetchTopKArticles(k: number, daysOld: number = 7): Promise<Article[]> {
     try {
       const res: QueryResult = await this.client.query(
-        "SELECT id, title, content, url, source, region, published_date, top_image FROM articles ORDER BY published_date DESC LIMIT $1;",
+        `SELECT id, title, content, url, source, region, published_date, top_image 
+       FROM articles 
+       WHERE published_date >= NOW() - INTERVAL '${daysOld} days'
+       ORDER BY RANDOM()
+       LIMIT $1;`,
         [k],
       );
 
