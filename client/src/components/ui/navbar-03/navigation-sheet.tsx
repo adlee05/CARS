@@ -24,11 +24,11 @@ export const NavigationSheet = () => {
           <div>
             <div className="font-bold">Food</div>
             <ul className="mt-2 space-y-3 ml-1 pl-4 border-l">
-              {categories.map((foodItem) => (
-                <li key={foodItem.title}>
+              {categories.map((category) => (
+                <li key={category.title}>
                   <Link to="#" className="flex items-center gap-2">
-                    <foodItem.icon className="h-5 w-5 mr-2 text-muted-foreground" />
-                    {foodItem.title}
+                    <category.icon className="h-5 w-5 mr-2 text-muted-foreground" />
+                    {category.title}
                   </Link>
                 </li>
               ))}
@@ -38,4 +38,4 @@ export const NavigationSheet = () => {
       </SheetContent>
     </Sheet>
   );
-};
+}

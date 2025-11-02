@@ -8,11 +8,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ChevronRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ChevronRight, Bookmark, BookmarkCheck } from "lucide-react";
 import type { Article } from "@/types/article";
 import { format } from "date-fns";
 import { redirectToArticle } from "@/services/api";
+import { useState } from "react";
 
 interface Blog02PageProps {
   articles: Article[];
@@ -27,6 +27,8 @@ const Blog02Page = ({ articles }: Blog02PageProps) => {
       console.error("Error redirecting to article:", error);
     }
   };
+
+  const [bookmarkedArticles, setBookmarkedArticles] = useState({});
 
   return (
     <div className="max-w-(--breakpoint-xl) mx-auto py-16 px-6 xl:px-0">
@@ -73,14 +75,31 @@ const Blog02Page = ({ articles }: Blog02PageProps) => {
               <p className="mt-2 text-muted-foreground line-clamp-2">
                 {article.content}
               </p>
-
-              <Button
-                size="sm"
-                className="mt-6 shadow-none"
-                onClick={() => handleReadMore(article.id)}
-              >
-                Read more <ChevronRight />
-              </Button>
+              <div className="flex gap-[10px]">
+                <Button
+                  size="sm"
+                  className="mt-6 shadow-none"
+                  onClick={() => handleReadMore(article.id)}
+                >
+                  Read more <ChevronRight />
+                </Button>
+                <Button
+                  size="sm"
+                  className="mt-6 shadow-none"
+                  onClick={() => {
+                    setBookmarkedArticles((prev) => ({
+                      ...prev,
+                      [article.id]: !prev[article.id], // Toggle only THIS article
+                    }));
+                  }}
+                >
+                  {bookmarkedArticles[article.id] ? (
+                    <BookmarkCheck />
+                  ) : (
+                    <Bookmark />
+                  )}
+                </Button>{" "}
+              </div>
             </CardContent>
           </Card>
         ))}

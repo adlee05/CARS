@@ -23,15 +23,7 @@ const footerLinks = [
   {
     title: "About",
     href: "#",
-  },
-  {
-    title: "Help",
-    href: "#",
-  },
-  {
-    title: "Privacy",
-    href: "#",
-  },
+  }, 
 ];
 
 const Footer05Page = () => {
@@ -77,7 +69,7 @@ const Footer05Page = () => {
               <Link to="#" target="_blank">
                 <TwitchIcon className="h-5 w-5" />
               </Link>
-              <Link to="#" target="_blank">
+              <Link to="https://github.com/adlee05/CARS" target="_blank">
                 <GithubIcon className="h-5 w-5" />
               </Link>
             </div>

@@ -1,15 +1,30 @@
 region_feeds:
   GLOBAL: # Global
-    - https://feeds.bbci.co.uk/news/world/rss.xml
+    - https://feeds.bbci.co.uk/news/world/rss.xml # bbc
+    - https://www.theguardian.com/international/rss  # the guardian
+    - https://timesofindia.indiatimes.com/rssfeeds/296589292.cms  # TOI
   EU: # European Union
-    - https://feeds.bbci.co.uk/news/world/europe/rss.xml
+    - https://feeds.bbci.co.uk/news/world/europe/rss.xml  # bbc
+    - https://timesofindia.indiatimes.com/rssfeeds/1898274.cms  # TOI
   IN: # Indian Subcontinent
-    - https://feeds.bbci.co.uk/news/world/asia/india/rss.xml
+    - https://feeds.bbci.co.uk/news/world/asia/india/rss.xml  # bbc
+    - https://timesofindia.indiatimes.com/rssfeeds/-2128936835.cms  # TOI
   US: # United States, required as a separate category for tech and geopolitical news
-    - https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml
+    - https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml  # bbc
+    - https://timesofindia.indiatimes.com/rssfeeds/30359486.cms  # TOI
+    - https://www.theguardian.com/us-news/rss
   AS: # Asia
-    - https://feeds.bbci.co.uk/news/world/asia/rss.xml
+    - https://feeds.bbci.co.uk/news/world/asia/rss.xml  # bbc
+    - https://timesofindia.indiatimes.com/rssfeeds/3907412.cms  # TOI
+    - https://www.theguardian.com/world/asia/rss  # the guardian
   AF: # Africa
-    - https://feeds.bbci.co.uk/news/world/africa/rss.xml
+    - https://feeds.bbci.co.uk/news/world/africa/rss.xml  # bbc
+    - https://timesofindia.indiatimes.com/rssfeeds/3907412.cms # TOI
+    - https://www.theguardian.com/world/africa/rss
   LATAM: # Latin America
-    - https://feeds.bbci.co.uk/news/world/latin_america/rss.xml    
+    - https://feeds.bbci.co.uk/news/world/latin_america/rss.xml  # bbc    
+    - https://www.theguardian.com/world/americas/rss  # the guardian
+  ME: # Middle East
+    - https://www.theguardian.com/world/middleeast  # the guardian
+    - https://timesofindia.indiatimes.com/rssfeeds/1898272.cms  # TOI
+    - https://feeds.bbci.co.uk/news/world/middle_east/rss.xml # bbc

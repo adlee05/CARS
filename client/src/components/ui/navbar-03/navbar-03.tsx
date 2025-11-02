@@ -6,9 +6,10 @@ import { NavigationSheet } from "./navigation-sheet";
 import { ArrowUpRight } from "lucide-react";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect, useState } from "react";
 
 const Navbar03Page = () => {
-  const isLoggedIn = false;
+  let isLoggedIn = true;
   const GetStartedButton = () => {
     return (
       <>
@@ -30,6 +31,18 @@ const Navbar03Page = () => {
       </>
     );
   };
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  useEffect(() => {
+    const token = localStorage.getItem("auth_token");
+    setIsAuthenticated(!!token);
+  }, []);
+
+  if (isAuthenticated === null) {
+    isLoggedIn = false;
+  } else {
+    isLoggedIn = true;
+  }
+
   return (
     <div className="">
       <nav className="h-16 bg-background border-b">

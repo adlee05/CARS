@@ -3,6 +3,24 @@ import re  # for text cleaning
 
 logger = setup_logging()
 
+def clean_article_text(text):
+    # Remove timestamps (e.g., "9 hours ago", "2 days ago")
+    text = re.sub(r'\d+\s+(hour|minute|day|week|month|year)s?\s+ago', '', text)
+    
+    # Remove "Share" and "Save" buttons
+    text = re.sub(r'\b(Share|Save|Tweet|Like)\b', '', text)
+    
+    # Remove standalone journalist titles
+    text = re.sub(r'\b(Diplomatic correspondent|Reporter|Journalist|Editor)\b', '', text, flags=re.IGNORECASE)
+    
+    # Remove multiple spaces/newlines
+    text = re.sub(r'\s+', ' ', text)
+    
+    # Remove leading/trailing whitespace
+    text = text.strip()
+    
+    return text
+
 def process_article(entry, feed, region):
     """Processes a single RSS entry into a clean dictionary."""
     try:
@@ -12,7 +30,7 @@ def process_article(entry, feed, region):
         article.parse()
 
         # Clean text: Remove extra whitespace, ads, etc.
-        clean_content = re.sub(r'\s+', ' ', article.text).strip()  # Normalize spaces
+        clean_content = clean_article_text(article.text)  # Normalize spaces
         if len(clean_content) < 100:  # Basic validation
             raise ValueError("Article content too short—possibly failed extraction.")
 

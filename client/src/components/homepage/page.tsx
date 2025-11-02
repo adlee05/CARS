@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Blog02Page from "@/components/homepage/cardTest";
+import BlogPage from "@/components/hero-section/page";
 import { fetchNews } from "@/services/api";
 import type { Article } from "@/types/article";
 
@@ -44,6 +45,7 @@ export default function Homepage() {
 
   return (
     <>
+      <BlogPage articles={articles} />
       <Blog02Page articles={articles} />
     </>
   );
