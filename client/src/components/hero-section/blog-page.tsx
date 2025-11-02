@@ -13,7 +13,7 @@ export default function BlogPage({ articles }: BlogPageProps) {
   if (!articles || articles.length === 0) {
     return (
       <div className="max-w-(--breakpoint-xl) mx-auto py-16 px-6 xl:px-0">
-        <p className="text-center">Loading articles...</p>
+        <p className="text-center">Loading hero...</p>
       </div>
     );
   }
@@ -39,7 +39,7 @@ export default function BlogPage({ articles }: BlogPageProps) {
               {featuredArticle?.region || "News"}
             </Badge>
             <h2 className="text-2xl leading-tight font-bold md:text-3xl">
-              {featuredArticle?.title || "Loading..."}
+              <Link to="#">{featuredArticle?.title || "Loading..."}</Link>
             </h2>
           </div>
         </div>

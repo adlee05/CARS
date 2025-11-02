@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 interface FeaturedPostSidebarItemProps {
   imageSrc: string;
   imageAlt: string;
@@ -7,7 +9,7 @@ interface FeaturedPostSidebarItemProps {
 export function FeaturedPostSidebarItem({
   imageSrc,
   imageAlt,
-  title
+  title,
 }: FeaturedPostSidebarItemProps) {
   return (
     <div className="flex items-center gap-4">
@@ -16,8 +18,9 @@ export function FeaturedPostSidebarItem({
         alt={imageAlt}
         className="w-16 h-16 aspect-square rounded-md object-cover"
       />
-      <h4 className="text-sm leading-snug font-medium">{title}</h4>
+      <Link to="#">
+        <h4 className="text-sm leading-snug font-medium">{title}</h4>
+      </Link>
     </div>
   );
 }
-
