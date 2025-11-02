@@ -17,9 +17,9 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "*", // Allow all origins
-    methods: "GET, POST, OPTIONS", // Allow necessary methods
-    allowedHeaders: "Content-Type, Authorization", // Allow Content-Type and Authorization headers
+    origin: "*",
+    methods: "GET, POST, OPTIONS",
+    allowedHeaders: "Content-Type, Authorization",
   }),
 );
 
@@ -37,7 +37,7 @@ let users: User[] = [
   {
     id: 1,
     username: "john_doe",
-    password: "$2b$10$eN8Cln1/2IWmreO6Egw4qO1Kf5nbapOS4fkH9fuB3f7fSPTELEv/W", // bcrypt hash of 'password123'
+    password: "$2b$10$eN8Cln1/2IWmreO6Egw4qO1Kf5nbapOS4fkH9fuB3f7fSPTELEv/W",
   },
 ];
 
@@ -91,7 +91,11 @@ app.post("/login", async (req: Request, res: Response) => {
 
     // Generate JWT for backward compatibility
     const token = jwt.sign(
-      { id: data.user.id, email: data.user.email, username: data.user.email?.split('@')[0] },
+      {
+        id: data.user.id,
+        email: data.user.email,
+        username: data.user.email?.split("@")[0],
+      },
       process.env.JWT_SECRET as string,
       { algorithm: "HS256", expiresIn: "48h" },
     );
@@ -115,8 +119,7 @@ app.post("/register", async (req: Request, res: Response) => {
   }
 
   try {
-    const redirectUrl = `${process.env.CLIENT_URL || 'http://localhost:5173'}/auth/email-confirmation`;
-    
+    const redirectUrl = `${process.env.CLIENT_URL || "http://localhost:5173"}/auth/email-confirmation`;
     const { data, error } = await supabase.auth.signUp({
       email: body.email,
       password: body.password,
@@ -132,22 +135,28 @@ app.post("/register", async (req: Request, res: Response) => {
     if (!data.user) {
       return res.status(400).json({ error: "Failed to create user" });
     }
-
-    // Check if email confirmation is required
     if (data.session) {
-      // User is automatically logged in (no email confirmation required)
+      await req.db.registerUser(
+        data.user.id,
+        data.user.email || "",
+        "user",
+        data.user.email?.split("@")[0] || "",
+      );
       const token = jwt.sign(
-        { id: data.user.id, email: data.user.email, username: data.user.email?.split('@')[0] },
+        {
+          id: data.user.id,
+          email: data.user.email,
+          username: data.user.email?.split("@")[0],
+        },
         process.env.JWT_SECRET as string,
         { algorithm: "HS256", expiresIn: "48h" },
       );
       return res.json({ token, user: data.user });
     } else {
-      // Email confirmation required
-      return res.json({ 
+      return res.json({
         user: data.user,
         requiresEmailConfirmation: true,
-        message: "Please check your email to confirm your account." 
+        message: "Please check your email to confirm your account.",
       });
     }
   } catch (err) {
