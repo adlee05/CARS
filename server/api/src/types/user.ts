@@ -1,7 +1,6 @@
 interface User {
-  id: number;
-  username: string;
-  password: string | undefined;
+  id: string;
+  aud: string;
 }
 
 export default User;
