@@ -203,7 +203,7 @@ class Database {
     }
   }
 
-  async getUserPasswordHash(userId: number) {
+  async getUserPasswordHash(userId: string) {
     try {
       const sql = "SELECT hash FROM public.user WHERE id = $1;";
       const res = await this.client.query(sql, [userId]);
@@ -223,7 +223,7 @@ class Database {
   }
 
   async getClickedArticleEmbeddings(
-    userId: number,
+    userId: string,
   ): Promise<Map<number, number[]>> {
     try {
       const sql = `
@@ -261,7 +261,7 @@ class Database {
     }
   }
   async getLastClickedArticleEmbedding(
-    userId: number,
+    userId: string,
   ): Promise<number[] | null> {
     try {
       const sql = `
@@ -292,7 +292,7 @@ class Database {
       throw err;
     }
   }
-  async getClickedArticleIds(userId: number) {
+  async getClickedArticleIds(userId: string) {
     try {
       const sql = `
             SELECT article_id
@@ -334,7 +334,7 @@ class Database {
     }
   }
   async recordInteraction(
-    userId: number,
+    userId: string,
     articleId: number,
     interactionType: string,
   ): Promise<void> {

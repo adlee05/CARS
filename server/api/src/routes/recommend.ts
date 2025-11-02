@@ -6,7 +6,6 @@ const Recommend = async (req: Request, res: Response): Promise<void> => {
   }
 
   try {
-    const embed = await req.db.getArticleEmbedding(id);
     const history_list = await req.db.getClickedArticleEmbeddings(req.user.id);
     if (history_list.size < 1) {
       res.status(400).json({ msg: `cold start is not handled yet` });
