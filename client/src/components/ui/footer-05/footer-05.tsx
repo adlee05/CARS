@@ -1,82 +1,52 @@
-import { Separator } from "@/components/ui/separator";
-import {
-  DribbbleIcon,
-  GithubIcon,
-  TwitchIcon,
-  TwitterIcon,
-} from "lucide-react";
-import { Link } from "react-router-dom";
+import { GithubIcon } from "lucide-react";
 
-const footerLinks = [
+const teamMembers = [
   {
-    title: "Overview",
-    href: "#",
+    name: "Team Member 1",
+    githubUrl: "#",
   },
   {
-    title: "Home",
-    href: "/",
+    name: "Team Member 2",
+    githubUrl: "#",
   },
   {
-    title: "Get Started",
-    href: "/login",
+    name: "Team Member 3",
+    githubUrl: "#",
   },
   {
-    title: "About",
-    href: "#",
-  }, 
+    name: "Team Member 4",
+    githubUrl: "#",
+  },
 ];
 
 const Footer05Page = () => {
   return (
-    <div className="flex flex-col">
-      <div className="grow bg-muted" />
-      <footer className="border-t">
-        <div className="max-w-(--breakpoint-xl) mx-auto">
-          <div className="py-12 flex flex-col justify-start items-center">
-            {/* Logo */}
+    <footer className="border-t">
+      <div className="max-w-(--breakpoint-xl) mx-auto">
+        <div className="py-8 flex flex-col sm:flex-row items-center justify-between gap-x-2 gap-y-5 px-6 xl:px-0">
+          {/* Copyright */}
+          <span className="text-muted-foreground">
+            Copyright © {new Date().getFullYear()} Curatr. All rights reserved.
+          </span>
 
-            <ul className="mt-6 flex items-center gap-4 flex-wrap">
-              {footerLinks.map(({ title, href }) => (
-                <li key={title}>
-                  <Link
-                    to={href}
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    {title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <Separator />
-          <div className="py-8 flex flex-col-reverse sm:flex-row items-center justify-between gap-x-2 gap-y-5 px-6 xl:px-0">
-            {/* Copyright */}
-            <span className="text-muted-foreground">
-              &copy; {new Date().getFullYear()}{" "}
-              <Link to="/" target="_blank">
-                Curatr
-              </Link>
-              . All rights reserved.
-            </span>
-
-            <div className="flex items-center gap-5 text-muted-foreground">
-              <Link to="#" target="_blank">
-                <TwitterIcon className="h-5 w-5" />
-              </Link>
-              <Link to="#" target="_blank">
-                <DribbbleIcon className="h-5 w-5" />
-              </Link>
-              <Link to="#" target="_blank">
-                <TwitchIcon className="h-5 w-5" />
-              </Link>
-              <Link to="https://github.com/adlee05/CARS" target="_blank">
+          {/* Team GitHub Links */}
+          <div className="flex items-center gap-5 text-muted-foreground">
+            {teamMembers.map((member, index) => (
+              <a
+                key={index}
+                href={member.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground transition-colors"
+                aria-label={`${member.name} GitHub`}
+              >
                 <GithubIcon className="h-5 w-5" />
-              </Link>
-            </div>
+              </a>
+            ))}
           </div>
         </div>
-      </footer>
-    </div>
+      </div>
+    </footer>
   );
 };
 
