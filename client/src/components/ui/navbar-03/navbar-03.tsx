@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { NavMenu } from "./nav-menu";
 import { NavigationSheet } from "./navigation-sheet";
 import { ArrowUpRight } from "lucide-react";
@@ -7,7 +7,6 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
 import Logo from "@/components/reuse/Logo";
-
 
 const Navbar03Page = () => {
   let isLoggedIn = true;
@@ -35,16 +34,20 @@ const Navbar03Page = () => {
     );
   };
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem("auth_token");
     setIsAuthenticated(!!token);
   }, []);
 
-  if (isAuthenticated === null) {
-    isLoggedIn = false;
-  } else {
-    isLoggedIn = true;
-  }
+  isLoggedIn = !!isAuthenticated;
+
+  const handleLogout = () => {
+    try {
+      localStorage.removeItem("auth_token");
+    } catch {}
+    navigate("/login");
+  };
 
   return (
     <div className="">
@@ -59,7 +62,16 @@ const Navbar03Page = () => {
 
           <div className="flex items-center gap-3">
             <ModeToggle />
-            {isLoggedIn ? <AvatarButton /> : <GetStartedButton />}
+            {isLoggedIn ? (
+              <>
+                <AvatarButton />
+                <Button variant="outline" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <GetStartedButton />
+            )}
             {/* Mobile Menu */}
             <div className="md:hidden">
               <NavigationSheet />
