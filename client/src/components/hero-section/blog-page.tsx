@@ -31,7 +31,7 @@ export default function BlogPage({ articles }: BlogPageProps) {
   const featuredArticle = articles[0];
   const sidebarArticles = articles.slice(1, 6);
   return (
-    <div className="max-w-(--breakpoint-xl) mx-auto py-16 px-6 xl:px-0">
+    <div className="max-w-(--breakpoint-xl) mx-auto py-8 px-6 xl:px-0">
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="relative h-[400px] overflow-hidden rounded-lg shadow-lg md:h-[500px] lg:col-span-2">
           <img
