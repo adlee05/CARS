@@ -1,6 +1,8 @@
 import BlogPage from "@/components/hero-section/blog-page";
 import { useState, useEffect } from "react";
 import { fetchNews } from "@/services/api";
+import type { Article } from "@/types/article";
+import HeroShimmer from "@/components/hero-section/hero-shimmer";
 
 export default function Page() {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -21,18 +23,11 @@ export default function Page() {
         setLoading(false);
       }
     };
-
     loadArticles();
   }, []);
-
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg">Loading articles...</p>
-      </div>
-    );
+    return <HeroShimmer />;
   }
-
   if (error) {
     return (
       <div className="flex items-center justify-center min-h-screen">

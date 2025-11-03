@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import Blog02Page from "@/components/homepage/cardTest";
 import BlogPage from "@/components/hero-section/page";
-import { fetchNews, fetchNewsByRegion } from "@/services/api";
+import { fetchNewsByRegion } from "@/services/api";
 import type { Article } from "@/types/article";
+import { ShimmerCardGrid } from "@/components/ui/shimmer-grid";
 
 export default function Homepage() {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -17,8 +18,10 @@ export default function Homepage() {
         setArticles(data);
         setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load articles');
-        console.error('Error fetching articles:', err);
+        setError(
+          err instanceof Error ? err.message : "Failed to load articles",
+        );
+        console.error("Error fetching articles:", err);
       } finally {
         setLoading(false);
       }
@@ -27,26 +30,18 @@ export default function Homepage() {
     loadArticles();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg">Loading articles...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg text-destructive">Error: {error}</p>
-      </div>
-    );
-  }
-
   return (
     <>
-      <BlogPage articles={articles} />
-      <Blog02Page articles={articles} />
+      <BlogPage />
+      <div className="max-w-(--breakpoint-xl) mx-auto py-8 px-6 xl:px-0">
+        {loading && <ShimmerCardGrid count={6} />}
+        {!loading && error && (
+          <div className="py-8">
+            <p className="text-lg text-destructive">Error: {error}</p>
+          </div>
+        )}
+        {!loading && !error && <Blog02Page articles={articles} />}
+      </div>
     </>
   );
 }

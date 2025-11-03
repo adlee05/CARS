@@ -4,6 +4,7 @@ import { Header } from "@/components/article/header";
 import { Content } from "@/components/article/content";
 import { fetchArticle } from "@/services/api";
 import type { Article } from "@/types/article";
+import ArticleShimmer from "@/components/article/article-shimmer";
 
 export default function BlogDetailPage() {
   const navigate = useNavigate();
@@ -62,13 +63,7 @@ export default function BlogDetailPage() {
   };
 
   if (loading) {
-    return (
-      <div className="bg-background min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-muted-foreground">Loading article...</p>
-        </div>
-      </div>
-    );
+    return <ArticleShimmer />;
   }
 
   if (error || !article) {

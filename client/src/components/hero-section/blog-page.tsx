@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { redirectToArticle } from "@/services/api";
+import { useNavigate } from "react-router-dom";
 
 import { FeaturedPostSidebarItem } from "./featured-post-sidebar-item";
 import type { Article } from "@/types/article";
@@ -11,15 +12,15 @@ interface BlogPageProps {
 }
 
 export default function BlogPage({ articles }: BlogPageProps) {
+  const navigate = useNavigate();
   const handleReadMore = async (articleId: number) => {
     try {
       const url = await redirectToArticle(articleId);
-      window.open(url, "_blank");
+      navigate(url);
     } catch (error) {
       console.error("Error redirecting to article:", error);
     }
   };
-
   if (!articles || articles.length === 0) {
     return (
       <div className="max-w-(--breakpoint-xl) mx-auto py-16 px-6 xl:px-0">
@@ -27,12 +28,8 @@ export default function BlogPage({ articles }: BlogPageProps) {
       </div>
     );
   }
-
-  // Use first article as the featured/hero article
   const featuredArticle = articles[0];
-  // Use next 5 articles for the sidebar
   const sidebarArticles = articles.slice(1, 6);
-
   return (
     <div className="max-w-(--breakpoint-xl) mx-auto py-16 px-6 xl:px-0">
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
