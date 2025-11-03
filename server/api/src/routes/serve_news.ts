@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 const GetNews = async (req: Request, res: Response): Promise<void> => {
   try {
     const articles = await req.db.fetchTopKArticles(15);
-    if (!articles) {
+    if (!articles || articles.length === 0) {
       res.status(404).json({ msg: "article database is empty" });
       return;
     }
