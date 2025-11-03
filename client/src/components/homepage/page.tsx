@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Blog02Page from "@/components/homepage/cardTest";
 import BlogPage from "@/components/hero-section/page";
-import { fetchNews } from "@/services/api";
+import { fetchNews, fetchNewsByRegion } from "@/services/api";
 import type { Article } from "@/types/article";
 
 export default function Homepage() {
@@ -13,7 +13,7 @@ export default function Homepage() {
     const loadArticles = async () => {
       try {
         setLoading(true);
-        const data = await fetchNews();
+        const data = await fetchNewsByRegion("IN");
         setArticles(data);
         setError(null);
       } catch (err) {

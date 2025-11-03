@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { redirectToArticle } from "@/services/api";
 
 import { FeaturedPostSidebarItem } from "./featured-post-sidebar-item";
 import type { Article } from "@/types/article";
@@ -10,6 +11,15 @@ interface BlogPageProps {
 }
 
 export default function BlogPage({ articles }: BlogPageProps) {
+  const handleReadMore = async (articleId: number) => {
+    try {
+      const url = await redirectToArticle(articleId);
+      window.open(url, "_blank");
+    } catch (error) {
+      console.error("Error redirecting to article:", error);
+    }
+  };
+
   if (!articles || articles.length === 0) {
     return (
       <div className="max-w-(--breakpoint-xl) mx-auto py-16 px-6 xl:px-0">
@@ -35,11 +45,18 @@ export default function BlogPage({ articles }: BlogPageProps) {
             className="w-full object-cover"
           />
           <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/70 to-transparent p-6 text-white">
-            <Badge className="mb-2 w-fit bg-white/20 text-white backdrop-blur-sm">
+            <Badge className="mb-2 w-fit bg-white/20 text-blue-400 backdrop-blur-sm">
               {featuredArticle?.region || "News"}
             </Badge>
-            <h2 className="text-2xl leading-tight font-bold md:text-3xl">
-              <Link to="#">{featuredArticle?.title || "Loading..."}</Link>
+            <h2 className="text-2xl leading-tight font-bold md:text-3xl m-0 p-0">
+              <div
+                onClick={() => {
+                  handleReadMore(featuredArticle.id);
+                }}
+                className="cursor-pointer"
+              >
+                {featuredArticle?.title || "Loading..."}
+              </div>
             </h2>
           </div>
         </div>
