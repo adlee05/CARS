@@ -18,13 +18,13 @@ import { categories } from "./config";
 
 export const NavMenu = (props: ComponentProps<typeof NavigationMenu>) => (
   <NavigationMenu {...props}> <NavigationMenuList className="gap-1 space-x-0 text-sm">
-      <NavigationMenuItem>
+      {/*<NavigationMenuItem>
         <Button variant="ghost" asChild>
           <Link to="/home">Home</Link>
         </Button>
-      </NavigationMenuItem>
+      </NavigationMenuItem>*/}
       <NavigationMenuItem>
-        <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
+        {/*<NavigationMenuTrigger>Categories</NavigationMenuTrigger>
         <NavigationMenuContent>
           <ul className="grid w-[400px] gap-3 p-1 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
             {categories.map((category) => (
@@ -38,7 +38,7 @@ export const NavMenu = (props: ComponentProps<typeof NavigationMenu>) => (
               </ListItem>
             ))}
           </ul>
-        </NavigationMenuContent>
+        </NavigationMenuContent>*/}
       </NavigationMenuItem>
     </NavigationMenuList>
   </NavigationMenu>
