@@ -26,7 +26,7 @@ export const Header = ({ category, title, author, publishedDate, onBack }: BlogH
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center space-x-4">
           <Avatar className="h-12 w-12">
-            <AvatarImage src={author.avatar} alt={author.name} className="object-cover" />
+            { /*<AvatarImage src={author.avatar} alt={author.name} className="object-cover" />*/}
             <AvatarFallback>{author.name.charAt(0)}</AvatarFallback>
           </Avatar>
           <div>
@@ -35,7 +35,7 @@ export const Header = ({ category, title, author, publishedDate, onBack }: BlogH
           </div>
         </div>
 
-        <div className="flex items-center space-x-3">
+        {/*<div className="flex items-center space-x-3">
           <span className="text-muted-foreground text-[11px] font-medium tracking-widest uppercase">
             Share this
           </span>
@@ -57,7 +57,7 @@ export const Header = ({ category, title, author, publishedDate, onBack }: BlogH
             className="hover:bg-blog-hover h-9 w-9 rounded-full">
             <Linkedin />
           </Button>
-        </div>
+        </div>*/}
       </div>
     </header>
   );

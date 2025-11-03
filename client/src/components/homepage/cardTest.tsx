@@ -78,14 +78,14 @@ const Blog02Page = ({ articles }: Blog02PageProps) => {
               <div className="flex gap-[10px]">
                 <Button
                   size="sm"
-                  className="mt-6 shadow-none"
+                  className="mt-6 shadow-none cursor-pointer"
                   onClick={() => handleReadMore(article.id)}
                 >
                   Read more <ChevronRight />
                 </Button>
                 <Button
                   size="sm"
-                  className="mt-6 shadow-none"
+                  className="mt-6 shadow-none cursor-pointer"
                   onClick={() => {
                     setBookmarkedArticles((prev) => ({
                       ...prev,

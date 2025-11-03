@@ -31,7 +31,7 @@ def process_article(entry, feed, region):
 
         # Clean text: Remove extra whitespace, ads, etc.
         clean_content = clean_article_text(article.text)  # Normalize spaces
-        if len(clean_content) < 100:  # Basic validation
+        if len(clean_content) < 500:  # Basic validation
             raise ValueError("Article content too short—possibly failed extraction.")
 
         processed_data = {

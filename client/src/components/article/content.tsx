@@ -18,7 +18,7 @@ export const Content = ({ content, coverImage }: BlogContentProps) => {
 
       <div className="prose prose-lg max-w-none">
         {content.map((paragraph, index) => (
-          <p key={index} className="text-blog-content mb-6 leading-relaxed">
+          <p key={index} className="text-lg mb-6 leading-relaxed">
             {paragraph}
           </p>
         ))}

@@ -28,3 +28,21 @@ region_feeds:
     - https://www.theguardian.com/world/middleeast  # the guardian
     - https://timesofindia.indiatimes.com/rssfeeds/1898272.cms  # TOI
     - https://feeds.bbci.co.uk/news/world/middle_east/rss.xml # bbc
+  TH: # Tech
+    - https://www.wired.com/feed
+    - https://rss.slashdot.org/Slashdot/slashdot
+  SC: # Science and nature
+    - https://www.livescience.com/feeds.xml
+    - https://feeds.science.org/rss/science.xml
+    - https://www.sciencedaily.com/rss/all.xml
+  ENT: # Entertainment
+    - https://www.ign.com/rss/articles/feed
+  ART: # Arts
+    - https://www.vogue.com/feed/rss
+    - https://www.elle.com/rss/all.xml/
+  SP:
+    - https://feeds.bbci.co.uk/sport/rss.xml
+    - https://www.espn.com/espn/rss/news
+    - https://timesofindia.indiatimes.com/rssfeeds/4719148.cms
+    - https://www.thehindu.com/sport/cricket/feeder/default.rss
+    - https://www.thehindu.com/sport/feeder/default.rss
