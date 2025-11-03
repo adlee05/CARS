@@ -8,10 +8,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Bookmark, BookmarkCheck } from "lucide-react";
 import type { Article } from "@/types/article";
 import { format } from "date-fns";
 import { redirectToArticle } from "@/services/api";
+import { useState } from "react";
 
 interface Blog02PageProps {
   articles: Article[];
@@ -21,11 +22,13 @@ const Blog02Page = ({ articles }: Blog02PageProps) => {
   const handleReadMore = async (articleId: number) => {
     try {
       const url = await redirectToArticle(articleId);
-      window.open(url, '_blank');
+      window.open(url, "_blank");
     } catch (error) {
-      console.error('Error redirecting to article:', error);
+      console.error("Error redirecting to article:", error);
     }
   };
+
+  const [bookmarkedArticles, setBookmarkedArticles] = useState({});
 
   return (
     <div className="max-w-(--breakpoint-xl) mx-auto py-16 px-6 xl:px-0">
@@ -45,10 +48,13 @@ const Blog02Page = ({ articles }: Blog02PageProps) => {
 
       <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
         {articles.map((article) => (
-          <Card key={article.id} className="shadow-none overflow-hidden rounded-md py-0">
+          <Card
+            key={article.id}
+            className="shadow-none overflow-hidden rounded-md py-0"
+          >
             <CardHeader className="p-0">
-              <img 
-                src={article.image} 
+              <img
+                src={article.image}
                 alt={article.title}
                 className="aspect-video w-full object-cover border-b"
               />
@@ -59,7 +65,7 @@ const Blog02Page = ({ articles }: Blog02PageProps) => {
                   {article.region}
                 </Badge>
                 <span className="font-medium text-xs text-muted-foreground">
-                  {format(new Date(article.published_date), 'MMM d, yyyy')}
+                  {format(new Date(article.published_date), "MMM d, yyyy")}
                 </span>
               </div>
 
@@ -69,10 +75,31 @@ const Blog02Page = ({ articles }: Blog02PageProps) => {
               <p className="mt-2 text-muted-foreground line-clamp-2">
                 {article.content}
               </p>
-
-              <Button size="sm" className="mt-6 shadow-none" onClick={() => handleReadMore(article.id)}>
-                Read more <ChevronRight />
-              </Button>
+              <div className="flex gap-[10px]">
+                <Button
+                  size="sm"
+                  className="mt-6 shadow-none"
+                  onClick={() => handleReadMore(article.id)}
+                >
+                  Read more <ChevronRight />
+                </Button>
+                <Button
+                  size="sm"
+                  className="mt-6 shadow-none"
+                  onClick={() => {
+                    setBookmarkedArticles((prev) => ({
+                      ...prev,
+                      [article.id]: !prev[article.id], // Toggle only THIS article
+                    }));
+                  }}
+                >
+                  {bookmarkedArticles[article.id] ? (
+                    <BookmarkCheck />
+                  ) : (
+                    <Bookmark />
+                  )}
+                </Button>{" "}
+              </div>
             </CardContent>
           </Card>
         ))}

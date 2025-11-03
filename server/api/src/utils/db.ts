@@ -24,6 +24,37 @@ public client: Client;
     await this.client.end();
   }
 
+  // In your Database class
+  async fetchArticlesByRegion(
+    region: string,
+    limit: number,
+  ): Promise<Article[]> {
+    try {
+      const res: QueryResult = await this.client.query(
+        `SELECT id, title, content, url, source, region, published_date, top_image 
+       FROM articles 
+       WHERE region = $1
+       ORDER BY published_date DESC 
+       LIMIT $2;`,
+        [region, limit],
+      );
+
+      return res.rows.map((row) => ({
+        id: row.id,
+        title: row.title,
+        content: row.content,
+        url: row.url,
+        source: row.source,
+        region: row.region,
+        published_date: row.published_date,
+        image: row.top_image,
+      }));
+    } catch (err) {
+      console.error("Error fetching articles by region:", err);
+      throw err;
+    }
+  }
+
   async fetchArticle(articleId: number): Promise<Article | null> {
     try {
       const res: QueryResult = await this.client.query(
@@ -64,11 +95,15 @@ public client: Client;
     }
   }
 
-  async fetchTopKArticles(k: number): Promise<Article[]> {
+  async fetchTopKArticles(k: number, daysOld: number = 7): Promise<Article[]> {
     try {
       const res: QueryResult = await this.client.query(
-        "SELECT id, title, content, url, source, region, published_date, top_image FROM articles ORDER BY published_date DESC LIMIT $1;",
-        [k],
+        `SELECT id, title, content, url, source, region, published_date, top_image 
+       FROM articles 
+       WHERE published_date >= NOW() - INTERVAL '1 day' * $2
+       ORDER BY RANDOM()
+       LIMIT $1;`,
+        [k, daysOld],
       );
 
       if (res.rows.length === 0) {

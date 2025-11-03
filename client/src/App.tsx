@@ -9,39 +9,37 @@ import PublicRoute from "@/components/auth/PublicRoute";
 
 function App() {
   return (
-      <Routes>
+    <Routes>
+      <Route
+        path="/login"
+        element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        }
+      />
+      <Route path="/auth/email-confirmation" element={<EmailConfirmation />} />
+      {/* GeneralLayout is now a route element */}
+      <Route path="/" element={<GeneralLayout />}>
         <Route
-          path="/login"
+          index
           element={
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
           }
         />
         <Route
-          path="/auth/email-confirmation"
-          element={<EmailConfirmation />}
+          path="home"
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }
         />
-        {/* GeneralLayout is now a route element */}
-        <Route path="/" element={<GeneralLayout />}>
-          <Route
-            index
-            element={
-              <ProtectedRoute>
-                <HomePage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="home"
-            element={
-              <ProtectedRoute>
-                <HomePage />
-              </ProtectedRoute>
-            }
-          />
-        </Route>
-      </Routes>
+      </Route>
+      {/* <Route path="/article/:id" element={<ArticleDetailPage />/> */}{" "}
+    </Routes>
   );
 }
 

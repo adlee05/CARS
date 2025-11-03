@@ -64,4 +64,3 @@ https://yourdomain.com/auth/email-confirmation
 - **Email not received**: Check Supabase project settings and ensure email is enabled
 - **Redirect not working**: Verify the redirect URL in Supabase settings matches your application
 - **Verification fails**: Check browser console and Supabase logs for error messages
-

@@ -12,7 +12,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 
 export function TabsComp() {
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ export function TabsComp() {
 
       // Store the token
       localStorage.setItem("auth_token", data.token);
-      
+
       // Redirect to home
       navigate("/");
     } catch (err) {
@@ -86,7 +87,9 @@ export function TabsComp() {
 
       // Check if email confirmation is required
       if (data.requiresEmailConfirmation) {
-        setSuccess(data.message || "Please check your email to confirm your account.");
+        setSuccess(
+          data.message || "Please check your email to confirm your account.",
+        );
         setLoading(false);
         // Don't redirect - show the message to the user
         return;
@@ -94,7 +97,7 @@ export function TabsComp() {
 
       // Store the token
       localStorage.setItem("auth_token", data.token);
-      
+
       // Redirect to home
       navigate("/");
     } catch (err) {
