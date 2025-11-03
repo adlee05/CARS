@@ -44,5 +44,9 @@ export default function Page() {
       </div>
     );
   }
-  return <BlogPage articles={articles} />;
+  return (
+    <>
+      <BlogPage articles={articles} />
+    </>
+  );
 }
