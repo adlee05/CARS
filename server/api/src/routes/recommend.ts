@@ -35,11 +35,11 @@ const Recommend = async (req: Request, res: Response): Promise<void> => {
 };
 
 const FakeRecommend = async (req: Request, res: Response): Promise<void> => {
-  const id = req.user.id;
-  if (!id) {
+  if (!req.user || !req.user.id) {
     res.status(400).send("Bad Request: ID should be a valid number");
     return;
   }
+  const id = req.user.id;
   try {
     const history_list = await req.db.getLastClickedArticleEmbedding(
       req.user.id,

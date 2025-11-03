@@ -12,7 +12,7 @@ interface Article {
 }
 
 class Database {
-  private client: Client;
+public client: Client;
 
   constructor() {
     this.client = new Client();
