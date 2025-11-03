@@ -42,7 +42,7 @@ const GetNewsByRegion = async (req: Request, res: Response): Promise<void> => {
       res.status(400).json({ error: "Region must be a valid string" });
       return;
     }
-    const articles = await req.db.fetchArticlesByRegion(region, 30);
+    const articles = await req.db.fetchArticlesByRegion(region, 18);
     if (!articles) {
       res.status(404).json({ msg: "article database is empty" });
       return;
@@ -95,12 +95,8 @@ const News4U = async (req: Request, res: Response): Promise<void> => {
       req.user.id,
     );
     if (!history_list || history_list.length < 1) {
-      console.log("Cold start condition: Using region-based news");
       return await GetNewsByRegion(req, res);
     }
-    console.log(
-      `Using personalized recommendations: ${history_list.length} articles in history`,
-    );
     return await FakeRecommend(req, res);
   } catch (error: unknown) {
     console.error("Error in News4U route:", error);
