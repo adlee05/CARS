@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { ChevronRight, Bookmark, BookmarkCheck } from "lucide-react";
 import type { Article } from "@/types/article";
+import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { redirectToArticle } from "@/services/api";
 import { useState } from "react";
@@ -19,15 +20,15 @@ interface Blog02PageProps {
 }
 
 const Blog02Page = ({ articles }: Blog02PageProps) => {
+  const navigate = useNavigate();
   const handleReadMore = async (articleId: number) => {
     try {
       const url = await redirectToArticle(articleId);
-      window.open(url, "_blank");
+      navigate(url);
     } catch (error) {
       console.error("Error redirecting to article:", error);
     }
   };
-
   const [bookmarkedArticles, setBookmarkedArticles] = useState({});
 
   return (
