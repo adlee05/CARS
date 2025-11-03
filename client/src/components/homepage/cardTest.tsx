@@ -9,8 +9,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ChevronRight, Bookmark, BookmarkCheck } from "lucide-react";
-import type { Article } from "@/types/article";
 import { useNavigate } from "react-router-dom";
+import type { Article } from "@/types/article";
 import { format } from "date-fns";
 import { redirectToArticle } from "@/services/api";
 import { useState } from "react";
@@ -20,8 +20,8 @@ interface Blog02PageProps {
 }
 
 const Blog02Page = ({ articles }: Blog02PageProps) => {
-  const navigate = useNavigate();
   const handleReadMore = async (articleId: number) => {
+    const navigate = useNavigate();
     try {
       const url = await redirectToArticle(articleId);
       navigate(url);
@@ -29,10 +29,13 @@ const Blog02Page = ({ articles }: Blog02PageProps) => {
       console.error("Error redirecting to article:", error);
     }
   };
-  const [bookmarkedArticles, setBookmarkedArticles] = useState({});
+
+  const [bookmarkedArticles, setBookmarkedArticles] = useState<
+    Record<number, boolean>
+  >({});
 
   return (
-    <div className="max-w-(--breakpoint-xl) mx-auto py-16 px-6 xl:px-0">
+    <div className="max-w-(--breakpoint-xl) mx-auto py-8 px-6 xl:px-0">
       <div className="flex items-end justify-between">
         <h2 className="text-3xl font-bold tracking-tight">News Articles</h2>
         <Select defaultValue="recommended">
@@ -51,7 +54,7 @@ const Blog02Page = ({ articles }: Blog02PageProps) => {
         {articles.map((article) => (
           <Card
             key={article.id}
-            className="shadow-none overflow-hidden rounded-md py-0"
+            className="shadow-none overflow-hidden rounded-md py-0 flex flex-col h-full"
           >
             <CardHeader className="p-0">
               <img
@@ -60,7 +63,7 @@ const Blog02Page = ({ articles }: Blog02PageProps) => {
                 className="aspect-video w-full object-cover border-b"
               />
             </CardHeader>
-            <CardContent className="pb-6">
+            <CardContent className="pb-6 flex flex-col flex-1">
               <div className="flex items-center gap-3">
                 <Badge className="bg-primary/5 text-primary hover:bg-primary/5 shadow-none">
                   {article.region}
@@ -69,24 +72,23 @@ const Blog02Page = ({ articles }: Blog02PageProps) => {
                   {format(new Date(article.published_date), "MMM d, yyyy")}
                 </span>
               </div>
-
               <h3 className="mt-4 text-[1.35rem] font-semibold tracking-tight">
                 {article.title}
               </h3>
               <p className="mt-2 text-muted-foreground line-clamp-2">
                 {article.content}
               </p>
-              <div className="flex gap-[10px]">
+              <div className="flex gap-[10px] mt-auto pt-4 flex-row justify-between">
                 <Button
                   size="sm"
-                  className="mt-6 shadow-none cursor-pointer"
+                  className="shadow-none"
                   onClick={() => handleReadMore(article.id)}
                 >
                   Read more <ChevronRight />
                 </Button>
                 <Button
                   size="sm"
-                  className="mt-6 shadow-none cursor-pointer"
+                  className="shadow-none"
                   onClick={() => {
                     setBookmarkedArticles((prev) => ({
                       ...prev,
