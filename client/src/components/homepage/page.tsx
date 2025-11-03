@@ -13,7 +13,7 @@ export default function Homepage() {
     const loadArticles = async () => {
       try {
         setLoading(true);
-        const data = await fetchNewsByRegion("IN");
+        const data = await fetchNewsByRegion("GLOBAL");
         setArticles(data);
         setError(null);
       } catch (err) {

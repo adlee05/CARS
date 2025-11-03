@@ -6,6 +6,7 @@ import { Routes, Route } from "react-router-dom";
 import GeneralLayout from "@/layouts/generalLayout";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import PublicRoute from "@/components/auth/PublicRoute";
+import Page from "@/components/profile/page";
 
 function App() {
   return (
@@ -37,8 +38,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Page />
+            </ProtectedRoute>
+          }
+        />
       </Route>
-      {/* <Route path="/article/:id" element={<ArticleDetailPage />/> */}{" "}
+      {" "}
     </Routes>
   );
 }
