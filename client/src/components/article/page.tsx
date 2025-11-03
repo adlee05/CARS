@@ -103,7 +103,7 @@ export default function BlogDetailPage() {
             content={splitContent(article.content)}
             coverImage={article.image}
           />
-        </div>
+        </div> 
       </div>
     </div>
   );

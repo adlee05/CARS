@@ -3,7 +3,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import { categories } from "./config";
-import { Logo } from "./logo";
+import Logo from "@/components/reuse/Logo";
 
 export const NavigationSheet = () => {
   return (

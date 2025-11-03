@@ -31,12 +31,13 @@ public client: Client;
   ): Promise<Article[]> {
     try {
       const res: QueryResult = await this.client.query(
+        // ✅ CORRECT - Add region filter
         `SELECT id, title, content, url, source, region, published_date, top_image 
-       FROM articles 
-       WHERE region = $1
-       ORDER BY published_date DESC 
-       LIMIT $2;`,
-        [region, limit],
+ FROM articles 
+ WHERE region = $1 AND published_date >= NOW() - INTERVAL '1 day' * $2
+ ORDER BY RANDOM()
+ LIMIT $3;`,
+        [region, 30, limit], // All 3 parameters used
       );
 
       return res.rows.map((row) => ({

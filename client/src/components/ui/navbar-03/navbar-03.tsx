@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
-import { Logo } from "./logo";
 import { NavMenu } from "./nav-menu";
 import { NavigationSheet } from "./navigation-sheet";
 import { ArrowUpRight } from "lucide-react";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
+import Logo from "@/components/reuse/Logo";
 
 const Navbar03Page = () => {
   let isLoggedIn = true;
@@ -24,10 +24,12 @@ const Navbar03Page = () => {
   const AvatarButton = () => {
     return (
       <>
-        <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        <Link to="/profile">
+          <Avatar>
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+        </Link>
       </>
     );
   };
@@ -63,7 +65,9 @@ const Navbar03Page = () => {
             {isLoggedIn ? (
               <>
                 <AvatarButton />
-                <Button variant="outline" onClick={handleLogout}>Logout</Button>
+                <Button variant="outline" onClick={handleLogout}>
+                  Logout
+                </Button>
               </>
             ) : (
               <GetStartedButton />

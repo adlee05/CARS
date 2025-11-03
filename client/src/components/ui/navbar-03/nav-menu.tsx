@@ -17,8 +17,7 @@ import type { ComponentProps } from "react";
 import { categories } from "./config";
 
 export const NavMenu = (props: ComponentProps<typeof NavigationMenu>) => (
-  <NavigationMenu {...props}>
-    <NavigationMenuList className="gap-1 space-x-0 text-sm">
+  <NavigationMenu {...props}> <NavigationMenuList className="gap-1 space-x-0 text-sm">
       <NavigationMenuItem>
         <Button variant="ghost" asChild>
           <Link to="/home">Home</Link>
@@ -28,14 +27,14 @@ export const NavMenu = (props: ComponentProps<typeof NavigationMenu>) => (
         <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
         <NavigationMenuContent>
           <ul className="grid w-[400px] gap-3 p-1 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-            {categories.map((food) => (
+            {categories.map((category) => (
               <ListItem
-                key={food.title}
-                title={food.title}
-                icon={food.icon}
+                key={category.title}
+                title={category.title}
+                icon={category.icon}
                 to="#"
               >
-                {food.description}
+                {category.description}
               </ListItem>
             ))}
           </ul>
