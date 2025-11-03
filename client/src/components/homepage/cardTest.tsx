@@ -20,8 +20,8 @@ interface Blog02PageProps {
 }
 
 const Blog02Page = ({ articles }: Blog02PageProps) => {
+  const navigate = useNavigate();
   const handleReadMore = async (articleId: number) => {
-    const navigate = useNavigate();
     try {
       const url = await redirectToArticle(articleId);
       navigate(url);
