@@ -17,8 +17,10 @@ export default function Page() {
         setArticles(data);
         setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load articles');
-        console.error('Error fetching articles:', err);
+        setError(
+          err instanceof Error ? err.message : "Failed to load articles",
+        );
+        console.error("Error fetching articles:", err);
       } finally {
         setLoading(false);
       }
@@ -35,5 +37,9 @@ export default function Page() {
       </div>
     );
   }
-  return <BlogPage articles={articles} />;
+  return (
+    <>
+      <BlogPage articles={articles} />
+    </>
+  );
 }

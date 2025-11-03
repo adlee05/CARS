@@ -1,6 +1,4 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import { redirectToArticle } from "@/services/api";
 import { useNavigate } from "react-router-dom";
 
@@ -32,6 +30,7 @@ export default function BlogPage({ articles }: BlogPageProps) {
   const sidebarArticles = articles.slice(1, 6);
   return (
     <div className="max-w-(--breakpoint-xl) mx-auto py-16 px-6 xl:px-0">
+      <h1>Hello</h1>
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="relative h-[400px] overflow-hidden rounded-lg shadow-lg md:h-[500px] lg:col-span-2">
           <img
@@ -63,14 +62,20 @@ export default function BlogPage({ articles }: BlogPageProps) {
           <h3 className="text-xl font-semibold">Other featured posts</h3>
           <div className="space-y-4">
             {sidebarArticles.map((article) => (
-              <FeaturedPostSidebarItem
-                key={article.id}
-                imageSrc={
-                  article.image || "https://placehold.co/600x400?text=."
-                }
-                imageAlt={article.title}
-                title={article.title}
-              />
+              <div
+                onClick={() => {
+                  handleReadMore(featuredArticle.id);
+                }}
+              >
+                <FeaturedPostSidebarItem
+                  key={article.id}
+                  imageSrc={
+                    article.image || "https://placehold.co/600x400?text=."
+                  }
+                  imageAlt={article.title}
+                  title={article.title}
+                />
+              </div>
             ))}
           </div>
         </div>
