@@ -12,7 +12,7 @@ interface Article {
 }
 
 class Database {
-public client: Client;
+  public client: Client;
 
   constructor() {
     this.client = new Client();
@@ -305,7 +305,7 @@ public client: Client;
     FROM public.user_interactions ui
     JOIN article_embeddings ae ON ui.article_id = ae.article_id
     WHERE ui.user_id = $1 AND ui.type = 'click'
-    ORDER BY ui.timestamp ASC
+    ORDER BY ui.timestamp DESC 
     LIMIT 1;`;
       const res = await this.client.query(sql, [userId]);
       if (res.rows.length === 0) {
