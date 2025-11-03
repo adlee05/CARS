@@ -15,7 +15,7 @@ const ArticleRedirect = async (req: Request, res: Response): Promise<void> => {
       return;
     }
     await req.db.recordInteraction(userId, pid, "click");
-    res.status(200).json({ url: article.url });
+    res.status(200).json({ url: `/article/${article_id}` });
   } catch (error: unknown) {
     console.error("Error in article redirect route:", error);
     const errorMessage =

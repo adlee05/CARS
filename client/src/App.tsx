@@ -2,6 +2,7 @@ import "./App.css";
 import Login from "@/components/login/page";
 import HomePage from "@/components/homepage/page";
 import EmailConfirmation from "@/components/auth/EmailConfirmation";
+import BlogDetailPage from "@/components/article/page";
 import { Routes, Route } from "react-router-dom";
 import GeneralLayout from "@/layouts/generalLayout";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
@@ -37,8 +38,15 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="article/:id"
+          element={
+            <ProtectedRoute>
+              <BlogDetailPage />
+            </ProtectedRoute>
+          }
+        />
       </Route>
-      {/* <Route path="/article/:id" element={<ArticleDetailPage />/> */}{" "}
     </Routes>
   );
 }

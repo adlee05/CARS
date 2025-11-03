@@ -117,3 +117,39 @@ export const redirectToArticle = async (articleId: number): Promise<string> => {
     throw error;
   }
 };
+
+export const fetchArticle = async (id: string | number): Promise<Article> => {
+  const token = getBearerToken();
+
+  if (!token) {
+    throw new Error(
+      'No authentication token found in localStorage. Please set it with: localStorage.setItem("auth_token", "your-token")',
+    );
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/article/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Failed to fetch article (${response.status}): ${errorText || response.statusText}`,
+      );
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching article:", {
+      url: `${API_BASE_URL}/article/${id}`,
+      id,
+      error,
+    });
+    throw error;
+  }
+};
