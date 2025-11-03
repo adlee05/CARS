@@ -5,6 +5,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Camera, Calendar, Mail, MapPin } from "lucide-react";
 
 export default function ProfileHeader() {
+  const email = (typeof window !== "undefined" && localStorage.getItem("user_email")) || "user@example.com";
+  const username = (typeof window !== "undefined" && localStorage.getItem("user_name")) || email.split("@")[0] || "User";
   return (
     <Card>
       <CardContent>
@@ -27,14 +29,14 @@ export default function ProfileHeader() {
           </div>
           <div className="flex-1 space-y-2">
             <div className="flex flex-col gap-2 md:flex-row md:items-center">
-              <h1 className="text-2xl font-bold">John Doe</h1>
+              <h1 className="text-2xl font-bold">{username}</h1>
               <Badge variant="secondary">Early Bird</Badge>
             </div>
-            <p className="text-muted-foreground">Senior Product Designer</p>
+            <p className="text-muted-foreground">Welcome back to your profile</p>
             <div className="text-muted-foreground flex flex-wrap gap-4 text-sm">
               <div className="flex items-center gap-1">
                 <Mail className="size-4" />
-                john.doe@example.com
+                {email}
               </div>
               <div className="flex items-center gap-1">
                 <MapPin className="size-4" />

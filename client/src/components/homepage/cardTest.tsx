@@ -1,27 +1,21 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { ChevronRight, Bookmark, BookmarkCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import type { Article } from "@/types/article";
 import { format } from "date-fns";
-import { redirectToArticle } from "@/services/api";
-import { useState } from "react";
+import { redirectToArticle, addBookmark, getBookmarks, removeBookmark } from "@/services/api";
+import { useEffect, useState } from "react";
 
 interface Blog02PageProps {
   articles: Article[];
 }
 
 const Blog02Page = ({ articles }: Blog02PageProps) => {
+  const navigate = useNavigate();
+
   const handleReadMore = async (articleId: number) => {
-    const navigate = useNavigate();
     try {
       const url = await redirectToArticle(articleId);
       navigate(url);
@@ -30,24 +24,46 @@ const Blog02Page = ({ articles }: Blog02PageProps) => {
     }
   };
 
-  const [bookmarkedArticles, setBookmarkedArticles] = useState<
-    Record<number, boolean>
-  >({});
+  const [bookmarkByArticle, setBookmarkByArticle] = useState<Record<number, string | undefined>>({});
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const rows = await getBookmarks();
+        const map: Record<number, string> = {};
+        rows.forEach((b) => {
+          const aid = Number(b.article_id);
+          if (!Number.isNaN(aid)) map[aid] = b.id;
+        });
+        setBookmarkByArticle(map);
+      } catch (e) {
+        // ignore if not logged in or request fails
+      }
+    })();
+  }, []);
+
+  const toggleBookmark = async (article: Article) => {
+    const current = bookmarkByArticle[article.id];
+    if (current) {
+      await removeBookmark(current);
+      setBookmarkByArticle((prev) => ({ ...prev, [article.id]: undefined }));
+    } else {
+      const row = await addBookmark({
+        article_id: article.id,
+        url: article.url,
+        title: article.title,
+        image: article.image,
+        region: article.region,
+        published_date: article.published_date,
+      });
+      setBookmarkByArticle((prev) => ({ ...prev, [article.id]: row.id }));
+    }
+  };
 
   return (
     <div className="max-w-(--breakpoint-xl) mx-auto py-8 px-6 xl:px-0">
       <div className="flex items-end justify-between">
         <h2 className="text-3xl font-bold tracking-tight">News Articles</h2>
-        <Select defaultValue="recommended">
-          <SelectTrigger className="w-[180px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="recommended">Recommended</SelectItem>
-            <SelectItem value="latest">Latest</SelectItem>
-            <SelectItem value="popular">Popular</SelectItem>
-          </SelectContent>
-        </Select>
       </div>
 
       <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -81,22 +97,17 @@ const Blog02Page = ({ articles }: Blog02PageProps) => {
               <div className="flex gap-[10px] mt-auto pt-4 flex-row justify-between">
                 <Button
                   size="sm"
-                  className="shadow-none"
+                  className="shadow-none cursor-pointer"
                   onClick={() => handleReadMore(article.id)}
                 >
                   Read more <ChevronRight />
                 </Button>
                 <Button
                   size="sm"
-                  className="shadow-none"
-                  onClick={() => {
-                    setBookmarkedArticles((prev) => ({
-                      ...prev,
-                      [article.id]: !prev[article.id], // Toggle only THIS article
-                    }));
-                  }}
+                  className="shadow-none cursor-pointer"
+                  onClick={() => toggleBookmark(article)}
                 >
-                  {bookmarkedArticles[article.id] ? (
+                  {bookmarkByArticle[article.id] ? (
                     <BookmarkCheck />
                   ) : (
                     <Bookmark />

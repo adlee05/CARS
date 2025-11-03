@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Header } from "@/components/article/header";
 import { Content } from "@/components/article/content";
-import { fetchArticle } from "@/services/api";
+import { fetchArticle, addBookmark, getBookmarks, removeBookmark } from "@/services/api";
 import type { Article } from "@/types/article";
 import ArticleShimmer from "@/components/article/article-shimmer";
 
@@ -12,6 +12,7 @@ export default function BlogDetailPage() {
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [bookmarkRowId, setBookmarkRowId] = useState<string | null>(null);
 
   useEffect(() => {
     const loadArticle = async () => {
@@ -37,6 +38,38 @@ export default function BlogDetailPage() {
 
     loadArticle();
   }, [id]);
+
+  // Load bookmark state for this article
+  useEffect(() => {
+    (async () => {
+      try {
+        if (!id) return;
+        const rows = await getBookmarks();
+        const found = rows.find((b) => b.article_id && Number(b.article_id) === Number(id));
+        setBookmarkRowId(found ? found.id : null);
+      } catch {
+        // ignore if unauthenticated or request failed
+      }
+    })();
+  }, [id]);
+
+  const toggleBookmark = async () => {
+    if (!article) return;
+    if (bookmarkRowId) {
+      await removeBookmark(bookmarkRowId);
+      setBookmarkRowId(null);
+    } else {
+      const row = await addBookmark({
+        article_id: article.id,
+        url: article.url,
+        title: article.title,
+        image: article.image,
+        region: article.region,
+        published_date: article.published_date,
+      });
+      setBookmarkRowId(row.id);
+    }
+  };
 
   // Format date from ISO string to readable format
   const formatDate = (dateString: string): string => {
@@ -103,6 +136,14 @@ export default function BlogDetailPage() {
             content={splitContent(article.content)}
             coverImage={article.image}
           />
+          <div className="mt-8 flex justify-end">
+            <button
+              onClick={toggleBookmark}
+              className="inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+            >
+              {bookmarkRowId ? "Remove Bookmark" : "Add Bookmark"}
+            </button>
+          </div>
         </div> 
       </div>
     </div>

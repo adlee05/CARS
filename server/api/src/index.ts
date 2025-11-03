@@ -44,7 +44,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: "*",
-    methods: "GET, POST, OPTIONS",
+    methods: "GET, POST, DELETE, OPTIONS",
     allowedHeaders: "Content-Type, Authorization",
   }),
 );

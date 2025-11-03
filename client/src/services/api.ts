@@ -151,3 +151,57 @@ export const fetchArticle = async (id: string | number): Promise<Article> => {
     throw error;
   }
 };
+
+// ---------- Bookmarks ----------
+export type Bookmark = {
+  id: string;
+  article_id?: string;
+  url?: string;
+  title?: string;
+  image?: string;
+  region?: string;
+  published_date?: string;
+  created_at: string;
+};
+
+const authHeaders = () => {
+  const token = getBearerToken();
+  if (!token) throw new Error("No authentication token found");
+  return {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+};
+
+export const getBookmarks = async (): Promise<Bookmark[]> => {
+  const res = await fetch(`${API_BASE_URL}/bookmarks`, {
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
+
+export const addBookmark = async (payload: {
+  article_id?: number | string;
+  url: string;
+  title?: string;
+  image?: string;
+  region?: string;
+  published_date?: string;
+}): Promise<Bookmark> => {
+  const res = await fetch(`${API_BASE_URL}/bookmarks`, {
+    method: "POST",
+    headers: authHeaders(),
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
+
+export const removeBookmark = async (id: string): Promise<void> => {
+  const res = await fetch(`${API_BASE_URL}/bookmarks/${id}`, {
+    method: "DELETE",
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error(await res.text());
+};

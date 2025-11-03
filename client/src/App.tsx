@@ -48,6 +48,16 @@ function App() {
           }
         />
       </Route>
+      <Route path="/" element={<GeneralLayout />}>
+        <Route
+          path="profile"
+          element={
+            <ProtectedRoute>
+              <Page />
+            </ProtectedRoute>
+          }
+        />
+      </Route>
     </Routes>
   );
 }
