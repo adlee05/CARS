@@ -152,5 +152,5 @@ const COUNTRY_TO_REGION: { [key: string]: string } = {
 
 export function getRegionFromCountryCode(countryCode: string): string {
   const region = COUNTRY_TO_REGION[countryCode.toUpperCase()];
-  return region || "IN"; // Default to US if country not found
+  return region || "IN"; // Default to IN if country not found
 }

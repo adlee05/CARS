@@ -16,7 +16,7 @@ export const Content = ({ content, coverImage }: BlogContentProps) => {
         </div>
       )}
 
-      <div className="prose prose-lg max-w-none">
+      <div className="prose prose-lg max-w-none text-justify">
         {content.map((paragraph, index) => (
           <p key={index} className="text-lg mb-6 leading-relaxed">
             {paragraph}

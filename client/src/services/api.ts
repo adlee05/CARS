@@ -16,7 +16,6 @@ export const fetchNewsByRegion = async (region: string): Promise<Article[]> => {
   }
 
   try {
-    // ✅ Send region as query parameter
     const url = new URL(`${API_BASE_URL}/news4u`);
     url.searchParams.append("region", region);
 
@@ -26,7 +25,6 @@ export const fetchNewsByRegion = async (region: string): Promise<Article[]> => {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      // ❌ Remove body - GET can't have body
     });
 
     if (!response.ok) {
