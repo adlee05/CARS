@@ -23,7 +23,6 @@ const GetNewsByRegion = async (req: Request, res: Response): Promise<void> => {
   try {
     const { region } = req.query;
 
-    // ✅ Check if region exists and is a string
     if (!region || typeof region !== "string") {
       res.status(400).json({ error: "Region must be a valid string" });
       return;
