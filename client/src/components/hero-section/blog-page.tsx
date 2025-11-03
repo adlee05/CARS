@@ -65,7 +65,7 @@ export default function BlogPage({ articles }: BlogPageProps) {
             {sidebarArticles.map((article) => (
               <div
                 onClick={() => {
-                  handleReadMore(featuredArticle.id);
+                  handleReadMore(article.id);
                 }}
               >
                 <FeaturedPostSidebarItem
