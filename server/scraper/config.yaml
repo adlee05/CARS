@@ -21,7 +21,7 @@ region_feeds:
     - https://feeds.bbci.co.uk/news/world/africa/rss.xml  # bbc
     - https://timesofindia.indiatimes.com/rssfeeds/3907412.cms # TOI
     - https://www.theguardian.com/world/africa/rss
-  LATAM: # Latin America
+  LATAM: # Latin Americaby Feed: All Lat
     - https://feeds.bbci.co.uk/news/world/latin_america/rss.xml  # bbc    
     - https://www.theguardian.com/world/americas/rss  # the guardian
   ME: # Middle East
