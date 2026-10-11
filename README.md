@@ -133,7 +133,7 @@ Update `server/scraper/config.yaml` to customize region/category RSS sources.
 - `POST /bookmarks`
 - `DELETE /bookmarks/:id`
 
-Most routes require `Authorization: ****** from Supabase login.
+Most routes require an `Authorization` header with a Supabase access token.
 
 ## Testing
 
